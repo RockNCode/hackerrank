@@ -6,6 +6,10 @@
 #define ISNOTVALID 0
 #define ISVALID 1
 
+int solnx1[80];
+int solny1[80];
+int solnx2[80];
+int solny2[80];
 
 int checkValid(int sudoku[][9]){
     int i =0;
@@ -44,7 +48,6 @@ int checkValid(int sudoku[][9]){
 
 void printGrid(int sudoku[][9]){
     int i = 0 ,j = 0;
-    printf("SUDOKU SOLVER BY MGARCIA\n");
     for(i=0;i<9;i++){
         if(i%3 ==0 ){
             printf("+-------------------------------+-------------------------------+--------------------------------\n");
@@ -88,6 +91,7 @@ int compareAll(int sudoku[][9],int i, int j,
                int *x1, int *y1,int *x2, int *y2){
     int k,l;
     int temp;
+    int soln=0;
     for(k=0; k<9 ;k++){
         for(l=0;l<9;l++){
             if(!(k == i && l == j))
@@ -96,10 +100,25 @@ int compareAll(int sudoku[][9],int i, int j,
                 sudoku[k][l] = sudoku[i][j];
                 sudoku[i][j] = temp;
                 if(checkValid(sudoku)){
-                    *x1 = i+1;
-                    *x2 = k+1;//j+1;
-                    *y1 = j+1;//k+1;
-                    *y2 = l+1;
+                    if( (i < k) ||
+                        ( (i == k) && (j < l ))
+                        ){
+                        *x1 = i+1;
+                        *y1 = j+1;
+
+                        *x2 = k+1;
+                        *y2 = l+1;
+                    }else{
+                        *x2 = i+1;
+                        *y2 = j+1;
+
+                        *x1 = k+1;
+                        *y1 = l+1;                        
+                    }
+                    //swap back
+                    temp = sudoku[k][l];
+                    sudoku[k][l] = sudoku[i][j];
+                    sudoku[i][j] = temp;
                     return 1;
                 }
                 else{
@@ -112,26 +131,32 @@ int compareAll(int sudoku[][9],int i, int j,
         }
     }
     return 0;
-
 }
-void checkSwap(int sudoku[][9],
+int checkSwap(int sudoku[][9],
                int *x1,int *y1,
                int *x2,int *y2){
     int i =0;
     int j =0;
     int k =0;
     int l =0;
-
+    int soln=0;
     for(i=0; i<9 ;i++){
         for(j=0;j<9;j++){
-            if(compareAll(sudoku,i,j,x1,y1,x2,y2))
-                return;
+            if(compareAll(sudoku,i,j,x1,y1,x2,y2)){
+                solnx1[soln] = *x1;
+                solnx2[soln] = *x2;
+                solny1[soln] = *y1;
+                solny2[soln] = *y2;
+                soln++;
+            }
         }
     }
+    return soln;
 }
 int main() {
     /* Enter your code here. Read input from STDIN. Print output to STDOUT */
     int i,t=1;
+    int soln=0;
     int mySudoku[9][9]={{0,7,8,0,0,0,0,2,0},
                         {0,0,0,0,0,2,0,0,3},
                         {4,0,0,0,0,0,0,7,0},
@@ -155,8 +180,11 @@ int main() {
             //printf("is not valid\n");
             int x1=-1,y1=-1;
             int x2=-1,y2=-1;
-            checkSwap(mySudoku,&x1,&y1,&x2,&y2);
-            printf("(%d,%d) <-> (%d,%d)\n",x1,y1,x2,y2);
+            int j;
+            soln = checkSwap(mySudoku,&x1,&y1,&x2,&y2);
+            for(j=0; j < soln; j++)
+                printf("(%d,%d) <-> (%d,%d)\n",solnx1[j],solny1[j],solnx2[j],solny2[j]);
+            soln=0;
         }
 
     }
