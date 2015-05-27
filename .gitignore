@@ -1,0 +1,5 @@
+*.out
+*.o
+utopianTree
+maximizeXor
+week15Challenge/*.out
