@@ -92,9 +92,9 @@ int compareAll(int sudoku[][9],int i, int j,
     int k,l;
     int temp;
     int soln=0;
-    for(k=0; k<9 ;k++){
+    for(k=i; k<9 ;k++){
         for(l=0;l<9;l++){
-            if(!(k == i && l == j))
+            if( !(k == i && l <= j) )
             {
                 temp = sudoku[k][l];
                 sudoku[k][l] = sudoku[i][j];
