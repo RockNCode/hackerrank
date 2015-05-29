@@ -9,12 +9,12 @@
 //L = min number of people so that a person goes in
 //H = highest number of people so that a person goes in
 
-unsigned long long people[100000][3];
-unsigned long long peopleSorted[100000][2];
-int maxH =0;
+unsigned long long people[1000000][3];
+unsigned long long peopleSorted[1000000][2];
+unsigned long long maxH =0;
 unsigned long long maxL =0;
-int minH =0;
-int minL =0;
+unsigned long long minH =0;
+unsigned long long minL =0;
 
 void printPeopleArray(unsigned long n)
 {
